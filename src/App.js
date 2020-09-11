@@ -1,26 +1,35 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { Component } from 'react';
+import {
+  addTodo,
+  toggleTodo,
+  setVisibilityFilter,
+  VisibilityFilters
+} from './store/actions'
+class App extends Component {
+  render () {
+    const { store } = this.props;
+    // 打印初始状态
+    console.log(store.getState())
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+    // 每次 state 更新时，打印日志
+    // 注意 subscribe() 返回一个函数用来注销监听器
+    const unsubscribe = store.subscribe(() =>
+      console.log(store.getState())
+    )
+
+    // 发起一系列 action
+    store.dispatch(addTodo('Learn about actions'))
+    store.dispatch(addTodo('Learn about reducers'))
+    store.dispatch(addTodo('Learn about store'))
+    store.dispatch(toggleTodo(0))
+    store.dispatch(toggleTodo(1))
+    store.dispatch(setVisibilityFilter(VisibilityFilters.SHOW_COMPLETED))
+
+    // 停止监听 state 更新
+    unsubscribe();
+    return (
+      <div>redux</div>
+    )
+  }
 }
-
 export default App;
